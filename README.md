@@ -19,6 +19,9 @@ This application about write a RESTFUL webservice that can be accessed via http/
 
 **Note:** I'll give my reason why I used those tools in more details on my interview ;).
 
+## DB Schema/ ERD Diagram
+https://github.com/gnaderi/superhero/wiki
+
 ## Api Documentation
  1.0 
 [ Base URL: `localhost:8443/` ]
