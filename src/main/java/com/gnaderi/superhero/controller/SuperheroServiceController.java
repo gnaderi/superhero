@@ -33,11 +33,7 @@ public class SuperheroServiceController {
     @Autowired
     private RequestValidator requestValidator;
 
-    @ApiOperation(value = "Pull a list of all superheroes stored in application.",
-            notes = "Retrieve all superheroes details.",
-            produces = MediaType.TEXT_PLAIN_VALUE, response = Response.class,
-            responseContainer = "String", httpMethod = "GET")
-
+    @ApiOperation(value = "Pull a list of all superheroes stored in application.", notes = "Retrieve all superheroes details.", produces = MediaType.TEXT_PLAIN_VALUE, response = Response.class, responseContainer = "String", httpMethod = "GET")
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public @ResponseBody
@@ -52,10 +48,7 @@ public class SuperheroServiceController {
 
     }
 
-    @ApiOperation(value = "Find a superhero stored in application by superhero Id.",
-            notes = "Find a superhero stored in application by superhero Id.",
-            produces = MediaType.TEXT_PLAIN_VALUE, response = SuperheroDetails.class,
-            responseContainer = "String", httpMethod = "GET")
+    @ApiOperation(value = "Find a superhero stored in application by superhero Id.", notes = "Find a superhero stored in application by superhero Id.", produces = MediaType.TEXT_PLAIN_VALUE, response = SuperheroDetails.class, responseContainer = "String", httpMethod = "GET")
     @RequestMapping(value = "/get/{heroId}", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public @ResponseBody
@@ -66,14 +59,10 @@ public class SuperheroServiceController {
 
     }
 
-    @ApiOperation(value = "Find a superhero stored in application by Name.",
-            notes = "Find a superhero stored in application by superhero name.",
-            produces = MediaType.TEXT_PLAIN_VALUE, response = SuperheroDetails.class,
-            responseContainer = "String", httpMethod = "GET")
+    @ApiOperation(value = "Find a superhero stored in application by Name.", notes = "Find a superhero stored in application by superhero name.", produces = MediaType.TEXT_PLAIN_VALUE, response = SuperheroDetails.class, responseContainer = "String", httpMethod = "GET")
     @RequestMapping(value = "/search/{heroName}", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-    public @ResponseBody
-    SuperheroDetails findByName(@PathVariable String heroName) throws Exception {
+    public @ResponseBody SuperheroDetails findByName(@PathVariable String heroName) throws Exception {
         LOGGER.info("Incoming request for Superhero Name#{} details.", heroName);
         final Superhero superhero = service.findByName(heroName);
         return getSuperheroDetails(superhero);
@@ -93,19 +82,15 @@ public class SuperheroServiceController {
         return outbound;
     }
 
-    @ApiOperation(value = "Create a superhero and store it in application.",
-            notes = "reate a superhero and store it with all details in application.",
-            produces = MediaType.TEXT_PLAIN_VALUE, response = String.class,
-            responseContainer = "String", httpMethod = "POST")
+    @ApiOperation(value = "Create a superhero and store it in application.", notes = "create a superhero and store it with all details in application.", produces = MediaType.TEXT_PLAIN_VALUE, response = String.class, responseContainer = "String", httpMethod = "POST")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ADMIN_USER')")
-    public @ResponseBody
-    String createSuperhero(@RequestBody CreateSuperheroRequest request) {
+    public @ResponseBody String createSuperhero(@RequestBody CreateSuperheroRequest request) {
         LOGGER.info("Incoming request for create superhero info#{}.", request);
         requestValidator.validateRequest(request);
-        boolean result = service.createSuperhero(request);
-        LOGGER.info("Outbound databind response:{}", result);
-        return result ? "OK. Created!" : "Unable to create the record.";
+        Superhero superhero = service.createSuperhero(request);
+        LOGGER.info("Outbound databind response:{}", superhero);
+        return superhero!=null ? "Superhero created with ID#"+superhero.getId() : "Unable to create the record.";
     }
 
 

@@ -18,7 +18,7 @@ Now if you issue a `docker images` command you should see `superhero:latest` ima
 ### Start container
 
 #### From Maven, default endpoint
-Basic usage with defaults: server IP 127.0.0.1, server port 9081
+Basic usage with defaults: server IP 127.0.0.1, server port 8443
 
 `mvn docker:start`
 

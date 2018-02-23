@@ -1,11 +1,56 @@
 # Superhero Task
 
-This application can be used as a seed to quick start your spring boot REST API project with a fully functional security module.
+This application about write a RESTFUL webservice that can be accessed via http/https.
+* Use Java for coding
+* Use any framework and build managers you like (please provide a short statement why you chose a particular framework)
+* Include some testing (unit, integration, end-to-end)
+* ................
 
 ## Main building blocks
- * Spring Boot 1.5.3.RELEASE go to http://docs.spring.io/spring-boot/docs/1.5.3.RELEASE/reference/htmlsingle/ to learn more about spring boot
- * JSON Web Token go to https://jwt.io/ to decode your generated token and learn more
- * H2 Database Engine - used for rapid prototyping and development, but not suitable for production at least in most cases. Go to www.h2database.com to learn more
+ * I have used Java as requested 
+ * I have used maven because its the best and I am good at it :D
+ * I have used spring for IOC, Spring JPA and Spring Boot 
+ * Implemented JSON Web Token go to https://jwt.io/ to decode your generated token.
+ * I used H2 Database Engine - it is good for rapid prototyping and development, but not suitable for production at least in most cases. 
+ * Implemented fully functional security module.
+ * Implemented https assess port 8443
+ * Docker file and  maven config implemented but had a issue with heath check accessing it, so I'll fix it later. 
+ * Implemented swagger to design, build, document, and consume RESTful Web services. Get superhero swagger file on runtime:`https://localhost:8443/v2/api-docs`
+
+**Note:** I'll give my reason why I used those tools in more details on my interview ;).
+
+## Api Documentation
+ 1.0 
+[ Base URL: `localhost:8443/` ]
+Api Documentation
+
+### Superhero Service REST API Interface
+
+* POST
+`/superhero/create`
+Create a superhero and store it in application.
+
+* GET
+`/superhero/get`
+Pull a list of all superheroes stored in application.
+
+* GET
+`/superhero/get/{heroId}`
+Find a superhero stored in application by superhero Id.
+
+* GET
+`/superhero/search/{heroName}`
+Find a superhero stored in application by Name.
+
+
+**Note:** to get a full documentation and details for request and response please:
+* got to http://editor.swagger.io/
+* Copy/Paste content of `resource/swagger-def.json` file into the swagger editor
+ to see the _**magic**_**!**
+
+
+
+
 
 
 
@@ -17,116 +62,121 @@ Use one of the several ways of running a Spring Boot application. Below are just
 3. Build and start as a Docker container. Instructions at: [README](src/main/docker/README.md)
 
 
-## To test the application
+
+
+
+# To test the application
 
  ### First you will need the following basic pieces of information:
 
- * client: testjwtclientid
- * secret: XY7kmzoNzl100
- * Non-admin username and password: john.doe and jwtpass
- * Admin user: admin.admin and jwtpass
- * Example of resource accessible to all authenticated users:  http://localhost:8080/superhero/cities
- * Example of resource accessible to only an admin user:  http://localhost:8080/superhero/users
+ * client: heroClientId
+ * secret: XY2371kmzoNzl
+ * Non-admin username and password: ganderi and jwtpass
+ * Admin user: admin and jwtpass
+ * Example of resource accessible to all authenticated users:  http://localhost:8090/superhero/get  or https://localhost:8443/superhero/get/{heroId}/
+ * Example of resource accessible to only an admin user:  http://localhost:8090/superhero/create/   or https://localhost:8443/superhero/create 
 
  1. Generate an access token
 
    Use the following generic command to generate an access token:
-   `$ curl client:secret@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=pwd`
+   
+   `$ curl -i -u client:secret https://${SERVER_IP}:8443/oauth/token -d grant_type=password -d username=user -d password=pwd`
 
    For this specific application, to generate an access token for the non-admin user john.doe, run:
-   `$ curl testjwtclientid:XY7kmzoNzl100@localhost:8080/oauth/token -d grant_type=password -d username=john.doe -d password=jwtpass`
-    You'll receive a response similar to below
-
-    `
-    {
-      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwidXNlcl9uYW1lIjoiYWRtaW4uYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNDk0NDU0MjgyLCJhdXRob3JpdGllcyI6WyJTVEFOREFSRF9VU0VSIiwiQURNSU5fVVNFUiJdLCJqdGkiOiIwYmQ4ZTQ1MC03ZjVjLTQ5ZjMtOTFmMC01Nzc1YjdiY2MwMGYiLCJjbGllbnRfaWQiOiJ0ZXN0and0Y2xpZW50aWQifQ.rvEAa4dIz8hT8uxzfjkEJKG982Ree5PdUW17KtFyeec",
-      "token_type": "bearer",
-      "expires_in": 43199,
-      "scope": "read write",
-      "jti": "0bd8e450-7f5c-49f3-91f0-5775b7bcc00f"
-    }`
+   
+   `$ curl -k -i -u  heroClientId:XY2371kmzoNzl https://localhost:8443/oauth/token -d grant_type=password -d username=admin -d password=jwtpass`
+   
+   You'll receive a response similar to below
+   
+    `{
+     "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsic2FtcGxlSnd0UmVzb3VyY2VJZCJdLCJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MTk0Mjk4NjksImF1dGhvcml0aWVzIjpbIlNUQU5EQVJEX1VTRVIiLCJBRE1JTl9VU0VSIl0sImp0aSI6ImEyZjhkNTJjLTkwOTctNDNjZS1iMzQxLWMzZTEwZGJkNzFhYiIsImNsaWVudF9pZCI6Imhlcm9DbGllbnRJZCJ9.Z8xdG8nhsFLAyIgQ3OKL62ZebpE1ht079EcbPE4T5zA",
+     "token_type": "bearer",
+     "expires_in": 43199,
+     "scope": "read write",
+     "jti": "a2f8d52c-9097-43ce-b341-c3e10dbd71ab"
+     }`
 
  2. Use the token to access resources through your RESTful API
 
     * Access content available to all authenticated users
 
-        Use the generated token  as the value of the Bearer in the Authorization header as follows:
-        `curl  http://localhost:8080/superhero/cities -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwidXNlcl9uYW1lIjoiYWRtaW4uYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNDk0NDU0MjgyLCJhdXRob3JpdGllcyI6WyJTVEFOREFSRF9VU0VSIiwiQURNSU5fVVNFUiJdLCJqdGkiOiIwYmQ4ZTQ1MC03ZjVjLTQ5ZjMtOTFmMC01Nzc1YjdiY2MwMGYiLCJjbGllbnRfaWQiOiJ0ZXN0and0Y2xpZW50aWQifQ.rvEAa4dIz8hT8uxzfjkEJKG982Ree5PdUW17KtFyeec" `
+        Use the generated token  as the value of the Bearer in the Authorization header as follows or use postman with that token:
+        `curl -k -X GET \
+           https://localhost:8443/superhero/get/1 \
+           -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsic2FtcGxlSnd0UmVzb3VyY2VJZCJdLCJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MTk0Mjk4NjksImF1dGhvcml0aWVzIjpbIlNUQU5EQVJEX1VTRVIiLCJBRE1JTl9VU0VSIl0sImp0aSI6ImEyZjhkNTJjLTkwOTctNDNjZS1iMzQxLWMzZTEwZGJkNzFhYiIsImNsaWVudF9pZCI6Imhlcm9DbGllbnRJZCJ9.Z8xdG8nhsFLAyIgQ3OKL62ZebpE1ht079EcbPE4T5zA' \
+           -H 'Cache-Control: no-cache' \
+           -H 'Postman-Token: c6eb4461-5f5c-402b-b673-9006db29be7b';`
 
-        The response will be:
-        `
-        [
-          {
-            "id": 1,
-            "name": "Bamako"
-          },
-          {
-            "id": 2,
-            "name": "Nonkon"
-          },
-          {
-            "id": 3,
-            "name": "Houston"
-          },
-          {
-            "id": 4,
-            "name": "Toronto"
-          },
-          {
-            "id": 5,
-            "name": "New York"
-          },
-          {
-            "id": 6,
-            "name": "Mopti"
-          },
-          {
-            "id": 7,
-            "name": "Koulikoro"
-          },
-          {
-            "id": 8,
-            "name": "Moscow"
-          }
-        ]`
+        The response will be for superhero id=1(` https://localhost:8443/superhero/get/1`):
+        
+        `{
+             "superhero": {
+                 "id": 1,
+                 "name": "Superman",
+                 "pseudonym": "Clark Kent",
+                 "firstAppearance": "1938-05-31",
+                 "publisher": {
+                     "id": 1,
+                     "name": "DC",
+                     "desc": "DC Comics"
+                 }
+             },
+             "skills": [
+                 {
+                     "id": 1,
+                     "name": "Fly",
+                     "desc": "Fly"
+                 },
+                 {
+                     "id": 2,
+                     "name": "Heat vision",
+                     "desc": "Heat vision"
+                 },
+                 {
+                     "id": 6,
+                     "name": "Speed",
+                     "desc": "Superhuman Speed"
+                 },
+                 {
+                     "id": 7,
+                     "name": "Strength",
+                     "desc": "Superhuman Strength"
+                 }
+             ],
+             "allies": [
+                 {
+                     "id": 4,
+                     "name": "Thor",
+                     "pseudonym": "Thor Odinson",
+                     "firstAppearance": "1962-07-31",
+                     "publisher": {
+                         "id": 2,
+                         "name": "Marvel",
+                         "desc": "Marvel Comics"
+                     }
+                 }
+             ]
+         }`
 
     * Access content available only to an admin user
 
        As with the previous example first generate an access token for the admin user with the credentials provided above then run
-           `curl  http://localhost:8080/superhero/users -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwidXNlcl9uYW1lIjoiYWRtaW4uYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNDk0NDU0OTIzLCJhdXRob3JpdGllcyI6WyJTVEFOREFSRF9VU0VSIiwiQURNSU5fVVNFUiJdLCJqdGkiOiIyMTAzMjRmMS05MTE0LTQ1NGEtODRmMy1hZjUzZmUxNzdjNzIiLCJjbGllbnRfaWQiOiJ0ZXN0and0Y2xpZW50aWQifQ.OuprVlyNnKuLkoQmP8shP38G3Hje91GBhu4E0HD2Fes" `
-           The result will be:
-           `
-           [
-             {
-               "id": 1,
-               "username": "john.doe",
-               "firstName": "John",
-               "lastName": "Doe",
-               "roles": [
-                 {
-                   "id": 1,
-                   "roleName": "STANDARD_USER",
-                   "description": "Standard User - Has no admin rights"
-                 }
-               ]
-             },
-             {
-               "id": 2,
-               "username": "admin.admin",
-               "firstName": "Admin",
-               "lastName": "Admin",
-               "roles": [
-                 {
-                   "id": 1,
-                   "roleName": "STANDARD_USER",
-                   "description": "Standard User - Has no admin rights"
-                 },
-                 {
-                   "id": 2,
-                   "roleName": "ADMIN_USER",
-                   "description": "Admin User - Has permission to perform admin tasks"
-                 }
-               ]
-             }
-           ]
-           `
+       
+           `curl -k -X POST \
+              https://localhost:8443/superhero/create \
+              -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsic2FtcGxlSnd0UmVzb3VyY2VJZCJdLCJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJleHAiOjE1MTk0Mjk4NjksImF1dGhvcml0aWVzIjpbIlNUQU5EQVJEX1VTRVIiLCJBRE1JTl9VU0VSIl0sImp0aSI6ImEyZjhkNTJjLTkwOTctNDNjZS1iMzQxLWMzZTEwZGJkNzFhYiIsImNsaWVudF9pZCI6Imhlcm9DbGllbnRJZCJ9.Z8xdG8nhsFLAyIgQ3OKL62ZebpE1ht079EcbPE4T5zA' \
+              -H 'Cache-Control: no-cache' \
+              -H 'Content-Type: application/json' \
+              -H 'Postman-Token: 3f67844b-2537-4d8d-805a-dfc77c58dbc1' \
+              -d '{
+              "name": "Ghodrat",
+                "pseudonym": "The Developer",
+                "firstAppearance": "1984-01-01",
+                "publisher":1,
+                "skills": [1,2,6,7],
+                 "allies": [2,4]
+            }'`
+            
+       The result will be:`Superhero created with ID#6`
+           
+       * You will be able to search or retrieve created record by `https://localhost:8443/superhero/get/{id}`  or `https://localhost:8443/superhero/search/{name}`

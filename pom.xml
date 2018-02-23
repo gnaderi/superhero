@@ -176,7 +176,7 @@
 							<run>
 								<namingStrategy>alias</namingStrategy>
 								<ports>
-									<port>${tomcat.port}:8080</port>
+									<port>${tomcat.port}:8090</port>
 								</ports>
 								<wait>
 									<http>

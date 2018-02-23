@@ -4,6 +4,8 @@ import com.gnaderi.superhero.entity.*;
 import com.gnaderi.superhero.inbound.CreateSuperheroRequest;
 import com.gnaderi.superhero.repository.*;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class SimpleSuperheroService implements SuperheroService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleSuperheroService.class);
     @Autowired
     private SuperheroCrudRepository shCrudRepository;
     @Autowired
@@ -50,16 +53,18 @@ public class SimpleSuperheroService implements SuperheroService {
 
     @Transactional
     @Override
-    public boolean createSuperhero(CreateSuperheroRequest req) {
+    public Superhero createSuperhero(CreateSuperheroRequest req) {
         try {
             Superhero superhero = createSuperhero(req.getName(), req.getPseudonym(), req.getFirstAppearance(), req.getPublisher());
             if (superhero == null) {
+                LOGGER.error("Unable to create superhero.");
                 throw new RuntimeException("Unable to save the superhero!");
             }
             req.getSuperheroAllies().forEach(el -> {
                 Superhero ally = shCrudRepository.findOne(el);
                 SuperheroAlliance alliance = allianceCrudRepository.save(new SuperheroAlliance(superhero, ally));
                 if (alliance == null) {
+                    LOGGER.error("Unable to save superhero ally#{}",ally);
                     throw new RuntimeException("Unable to save superhero details.");
                 }
 
@@ -68,15 +73,16 @@ public class SimpleSuperheroService implements SuperheroService {
                 Skill skill = skillCrudRepository.findOne(el);
                 SuperheroPower superheroPower = powerCrudRepository.save(new SuperheroPower(superhero, skill));
                 if (superheroPower == null) {
+                    LOGGER.error("Unable to save superhero power#{}",skill);
                     throw new RuntimeException("Unable to save superhero details.");
                 }
 
             });
 
-            return true;
+            return superhero;
 
         } catch (Exception ex) {
-            return false;
+            return null;
         }
     }
 

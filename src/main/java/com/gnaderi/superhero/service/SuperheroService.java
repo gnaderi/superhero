@@ -24,7 +24,7 @@ public interface SuperheroService {
     SuperheroPower createPowers(Superhero superhero, Skill skill);
 
     @Transactional
-    boolean createSuperhero(CreateSuperheroRequest request);
+    Superhero createSuperhero(CreateSuperheroRequest request);
 
     List<Superhero> findAll();
 
