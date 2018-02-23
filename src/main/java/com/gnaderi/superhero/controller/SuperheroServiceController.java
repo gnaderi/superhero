@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
 @Api(value = "Superhero Service REST API Interface", tags = "Superhero Service REST API Interface", description = "Superhero Service REST API Interface")
 @PropertySource(value = "classpath:application.properties")
 @RestController
+@RequestMapping(value = "/superhero")
 public class SuperheroServiceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SuperheroServiceController.class);
 
@@ -37,6 +39,7 @@ public class SuperheroServiceController {
             responseContainer = "String", httpMethod = "GET")
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public @ResponseBody
     Response fetchAllSuperheroes() {
         LOGGER.info("Incoming request for all records.");
@@ -54,6 +57,7 @@ public class SuperheroServiceController {
             produces = MediaType.TEXT_PLAIN_VALUE, response = SuperheroDetails.class,
             responseContainer = "String", httpMethod = "GET")
     @RequestMapping(value = "/get/{heroId}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public @ResponseBody
     SuperheroDetails findById(@PathVariable Long heroId) throws Exception {
         LOGGER.info("Incoming request for superhero#{} details.", heroId);
@@ -67,6 +71,7 @@ public class SuperheroServiceController {
             produces = MediaType.TEXT_PLAIN_VALUE, response = SuperheroDetails.class,
             responseContainer = "String", httpMethod = "GET")
     @RequestMapping(value = "/search/{heroName}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public @ResponseBody
     SuperheroDetails findByName(@PathVariable String heroName) throws Exception {
         LOGGER.info("Incoming request for Superhero Name#{} details.", heroName);
@@ -93,6 +98,7 @@ public class SuperheroServiceController {
             produces = MediaType.TEXT_PLAIN_VALUE, response = String.class,
             responseContainer = "String", httpMethod = "POST")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('ADMIN_USER')")
     public @ResponseBody
     String createSuperhero(@RequestBody CreateSuperheroRequest request) {
         LOGGER.info("Incoming request for create superhero info#{}.", request);

@@ -1,4 +1,4 @@
-package com.gnaderi.superhero;
+package com.gnaderi.superhero.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
