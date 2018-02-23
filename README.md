@@ -56,6 +56,11 @@ Find a superhero stored in application by Name.
 
 
 
+## **Important!**
+**I have deployed the application to https://boiling-refuge-19519.herokuapp.com/superhero 
+you will need to replace `https://localhost:8443/superhero` or `http://localhost:8090/superhero` with that to test the online one!**
+
+
 
 ## To run the application
 Use one of the several ways of running a Spring Boot application. Below are just three options:
